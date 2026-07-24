@@ -46,6 +46,22 @@ function getGatedAbilities(card, side = "") {
     }).join("\n")
 }
 
+function getTraumaTable(card) {
+  return card.traumaTable.map((row) => {
+    return `${row.type} ${row.range}`
+  }).join(", ")
+}
+
+function getKratosTable(card) {
+  return card.kratosTable.map((row, i) => {
+    return i + ". " + row.map((group) => {
+      return group.map((ability) => {
+        return `${ability.name}${ability.x_value ? ` ${ability.x_value}` : ""}`
+      }).join(" + ")
+    }).join(" OR ") + "\n"
+  }).join("")
+}
+
 function createPost({ day }) {
   fs.readFile('./data/JSON/gearData.json', 'utf8', (err, data) => {
     if (err) {
@@ -111,4 +127,37 @@ ${getAbilities(todaysCard, "2") || "* None"}${"\n" + getGatedAbilities(todaysCar
   });
 }
 
-createPost({ day: 91 })
+function createTitanPost({ day }) {
+  fs.readFile('./data/JSON/titanData.json', 'utf8', (err, data) => {
+    if (err) {
+      console.error('Error reading file:', err);
+      return;
+    }
+    const titanCards = JSON.parse(data);
+    const sortedTitanCards = [...titanCards].sort((a, b) =>
+      parseInt(a.cardIDs[0].slice(2), 10) - parseInt(b.cardIDs[0].slice(2), 10)
+    );
+    const todaysCard = sortedTitanCards[day - 1]
+
+    console.log(`
+Bonus Analysis ${day} 
+
+>>> __**${todaysCard.name}**__
+**Acquired From**: -
+**Power Level**: ${cycleToNumber(todaysCard.cycle)}
+
+__Trauma Table__:
+${getTraumaTable(todaysCard)}
+
+__Kratos Table__:
+${getKratosTable(todaysCard)}
+
+__Abilities__:
+${getAbilities(todaysCard) || "* None"}
+  
+`)
+  });
+}
+
+//createPost({ day: 102 })
+createTitanPost({ day: 5 })
