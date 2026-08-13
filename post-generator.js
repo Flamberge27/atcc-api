@@ -143,7 +143,7 @@ function createTitanPost({ day }) {
 Bonus Analysis ${day} 
 
 >>> __**${todaysCard.name}**__
-**Acquired From**: -
+**Acquired From**: Crafting, Hub Reward
 **Power Level**: ${cycleToNumber(todaysCard.cycle)}
 
 __Trauma Table__:
@@ -152,6 +152,8 @@ ${getTraumaTable(todaysCard)}
 __Kratos Table__:
 ${getKratosTable(todaysCard)}
 
+__Power Die__: ${todaysCard.titanPower}
+
 __Abilities__:
 ${getAbilities(todaysCard) || "* None"}
   
@@ -159,5 +161,5 @@ ${getAbilities(todaysCard) || "* None"}
   });
 }
 
-//createPost({ day: 102 })
-createTitanPost({ day: 5 })
+// createPost({ day: 121 })
+createTitanPost({ day: 8 })
